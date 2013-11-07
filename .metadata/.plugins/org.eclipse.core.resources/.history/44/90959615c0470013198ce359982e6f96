@@ -1,0 +1,25 @@
+package com.github.orekyuu.niconico.nama;
+
+public class UserLogin implements Login{
+
+	@Override
+	public void login() {
+
+	}
+
+	@Override
+	public String getThreadID() {
+		return null;
+	}
+
+	@Override
+	public String getAddress() {
+		return null;
+	}
+
+	@Override
+	public String getPort() {
+		return null;
+	}
+
+}

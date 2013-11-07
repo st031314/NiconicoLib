@@ -1,0 +1,48 @@
+package com.github.orekyuu.niconico.nama;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Scanner;
+
+import com.github.orekyuu.niconico.XMLHelper;
+
+class StreamInfoBuilder {
+
+	static StreamInfo create(String str) throws IOException{
+		StreamInfo info=new StreamInfo();
+		String[] data=str.split(",");
+		String xml=getXML(data[0]);
+		try{
+			info.setBroadcastID(Integer.parseInt(data[0]));
+			info.setTitle(XMLHelper.getXMLValue(xml, "title").get(0));
+			info.setDescription(XMLHelper.getXMLValue(xml, "description").get(0));
+			info.setProvider_type(XMLHelper.getXMLValue(xml, "provider_type").get(0));
+			info.setCommunityID(XMLHelper.getXMLValue(xml, "default_community").get(0));
+			info.setCommunityName(XMLHelper.getXMLValue(xml, "name").get(0));
+			info.setThumbnailURL(XMLHelper.getXMLValue(xml, "thumbnail").get(0));
+			info.setStreamURL("http://live.nicovideo.jp/watch/lv"+data[0]);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+
+		return info;
+	}
+
+	private static String getXML(String id) throws IOException{
+		URL url=new URL("http://live.nicovideo.jp/api/getstreaminfo/lv"+id);
+		HttpURLConnection http=(HttpURLConnection) url.openConnection();
+		http.setConnectTimeout(3000);
+		http.setRequestMethod("GET");
+		http.setUseCaches(false);
+		http.connect();
+
+		String xml="";
+		Scanner scanner=new Scanner(http.getInputStream(),"utf-8");
+		while(scanner.hasNext()){
+			xml+=scanner.nextLine();
+		}
+		http.disconnect();
+		return xml;
+	}
+}

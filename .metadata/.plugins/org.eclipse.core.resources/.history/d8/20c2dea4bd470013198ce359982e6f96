@@ -1,0 +1,88 @@
+package com.github.orekyuu.niconico.nama;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.Socket;
+import java.util.List;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
+
+import com.github.orekyuu.niconico.XMLHelper;
+
+class NiconamaThread extends Thread{
+
+	private String address;
+	private String port;
+	private String threadID;
+	private List<NiconamaListener> list;
+
+
+	NiconamaThread(String address,String port,String threadID,List<NiconamaListener> list){
+		this.address=address;
+		this.port=port;
+		this.threadID=threadID;
+		this.list=list;
+	}
+
+	@Override
+	public void run(){
+		DataInputStream is=null;
+		try{
+			Socket socket=new Socket(address,Integer.parseInt(port));
+			DataOutputStream os=new DataOutputStream(socket.getOutputStream());
+			os.writeBytes("<thread thread=\"" + threadID + "\" version=\"20061206\" res_from=\"-1\"/>\0");
+			os.flush();
+
+			is=new DataInputStream(socket.getInputStream());
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		while(true){
+			try {
+				List<String> list = receiveMessage(is);
+				for(String s:list){
+					sendListeners(s);
+				}
+			} catch (ParserConfigurationException e) {
+				e.printStackTrace();
+			} catch (SAXException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private void sendListeners(String s){
+		try {
+			StreamInfo info = StreamInfoBuilder.create(s);
+			for(NiconamaListener l:list){
+				l.onReceive(info);
+			}
+		} catch (IOException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		}
+	}
+
+	private List<String> receiveMessage(DataInputStream in) throws ParserConfigurationException, SAXException{
+		int len;
+		byte[] buffer = new byte[1024];
+
+		try {
+			while (true) {
+				len=in.read(buffer);
+				if(len<1)break;
+				String receve=new String(buffer);
+				receve=receve.replace('\0', '\n');
+				List<String> data=XMLHelper.getXMLValue("<root>"+receve+"</root>", "chat");
+				return data;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+}

@@ -1,0 +1,17 @@
+package com.github.orekyuu.niconico.nama;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+
+class StreamInfoBuilder {
+
+	static StreamInfo create(String str){
+		StreamInfo info=new StreamInfo();
+		String[] data=str.split(",");
+		String xml=getXML(data[0]);
+	}
+
+	private static String getXML(String id) throws MalformedURLException{
+		URL url=new URL("http://live.nicovideo.jp/api/getstreaminfo/lv"+id);
+	}
+}

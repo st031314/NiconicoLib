@@ -1,0 +1,16 @@
+package com.github.orekyuu.niconico.nama;
+
+import java.net.URL;
+
+class StreamInfoBuilder {
+
+	static StreamInfo create(String str){
+		StreamInfo info=new StreamInfo();
+		String[] data=str.split(",");
+		String xml=getXML();
+	}
+
+	private static String getXML(String id){
+		URL url=new URL("http://live.nicovideo.jp/api/getstreaminfo/lv"+id);
+	}
+}

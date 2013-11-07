@@ -1,0 +1,12 @@
+{
+  "C:\\pleiades\\java\\6\\lib\\rt.jar": {
+    "coordinate": "jre:jre:zip:call:1.0.0",
+    "location": "C:\\pleiades\\java\\6\\lib\\rt.jar",
+    "status": "RESOLVED"
+  },
+  "C:\\NicoNicoLib\\NicNicoLibrary\\src": {
+    "location": "C:\\NicoNicoLib\\NicNicoLibrary\\src",
+    "status": "UNRESOLVED",
+    "error": "No class path info available for \u0027C:\\NicoNicoLib\\NicNicoLibrary\\src\u0027. Skipped."
+  }
+}

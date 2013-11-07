@@ -1,0 +1,146 @@
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.StringReader;
+import java.net.HttpURLConnection;
+import java.net.Socket;
+import java.net.URL;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
+
+public class Main {
+
+	private String addr;
+	private String port;
+	private String thread;
+
+	public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException {
+		Main main=new Main();
+		main.test();
+		//main.authentication1();
+		//main.connectServer();
+	}
+
+	void test() throws ParserConfigurationException, SAXException, IOException{
+		String a=getXMLValue("<?xml version=\"1.0\" encoding=\"utf-8\"?><getalertstatus status=\"ok\" time=\"1383829441\"><user_id>Anonymous</user_id><user_hash>7yHDp5W6h6QhmUBH3mwQAcR2jP4</user_hash><ms><addr>twr01.live.nicovideo.jp</addr><port>2528</port><thread>1000000006</thread></ms></getalertstatus>", "port").get(0);
+		System.out.println(a);
+
+		String b=getXMLValue("<chat thread=\"1000000002\" no=\"25286670\" date=\"1383829518\" user_id=\"394\" premium=\"2\">158589892,co1993461,12506422</chat>", "chat").get(0);
+		System.out.println(b);
+	}
+
+	void authentication1() throws IOException, ParserConfigurationException, SAXException{
+		URL url=new URL("http://live.nicovideo.jp/api/getalertinfo");
+		HttpURLConnection http=(HttpURLConnection) url.openConnection();
+		http.setConnectTimeout(3000);
+		http.setRequestMethod("POST");
+		http.setUseCaches(false);
+		http.connect();
+
+		Scanner scanner=new Scanner(http.getInputStream(),"utf-8");
+		String lines="";
+		while(scanner.hasNext()){
+			lines+=scanner.nextLine();
+		}
+		System.out.println(lines);
+		addr=getXMLValue(lines, "addr").get(0);
+		port=getXMLValue(lines, "port").get(0);
+		thread=getXMLValue(lines, "thread").get(0);
+
+		scanner.close();
+		http.disconnect();
+
+		System.out.println("addr:"+addr);
+		System.out.println("port:"+port);
+		System.out.println("thread:"+thread);
+
+	}
+
+	void connectServer() throws NumberFormatException, UnknownHostException, IOException, ParserConfigurationException, SAXException{
+		Socket socket=new Socket(addr,Integer.parseInt(port));
+		DataOutputStream os=new DataOutputStream(socket.getOutputStream());
+		os.writeBytes("<thread thread=\"" + thread + "\" version=\"20061206\" res_from=\"-1\"/>\0");
+		os.flush();
+
+		DataInputStream is=new DataInputStream(socket.getInputStream());
+		while(true){
+			List<String> list=receiveMessage(is);
+			for(String s:list)
+				System.out.println(s);
+		}
+	}
+
+	private List<String> receiveMessage(DataInputStream in) throws ParserConfigurationException, SAXException{
+		int len;
+		byte[] buffer = new byte[1024];
+
+		try {
+			while (true) {
+				len=in.read(buffer);
+				if(len<1)break;
+				String receve=new String(buffer);
+				System.out.println(receve);
+				List<String> data=getXMLValue(receve, "chat");
+				return data;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	List<String> getXMLValue(String lines,String tagName) throws ParserConfigurationException, SAXException, IOException{
+		List<String> list=new ArrayList<String>();
+		InputSource is = new InputSource(new StringReader(lines));
+		DocumentBuilderFactory factory=DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder=factory.newDocumentBuilder();
+		Document doc=builder.parse(is);
+		Element root = doc.getDocumentElement();
+
+		if(tagName.equals(root.getNodeName())){
+			list.add(root.getTextContent());
+			return list;
+		}
+
+		traverse(root,tagName,list);
+		return list;
+	}
+
+	void traverse(Node re,String tagName,List<String> list){
+		for(Node fc = re.getFirstChild(); fc != null; fc = fc.getNextSibling()){
+			String name = fc.getNodeName();
+
+			if(fc.getNodeType() == Node.ELEMENT_NODE){
+				if(tagName.equals(name)){
+					list.add(fc.getTextContent());
+					return;
+				}
+				traverse(fc,tagName,list);
+			}
+		}
+/*
+		Node n=re.getFirstChild();
+		while(n!=null){
+			n=n.getNextSibling();
+
+			if(n.getNodeType() == Node.ELEMENT_NODE){
+				System.out.println("ノード名:" + n.getNodeName());
+				traverse(n);
+			}
+		}*/
+	}
+
+}

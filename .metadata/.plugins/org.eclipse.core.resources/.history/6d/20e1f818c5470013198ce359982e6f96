@@ -1,0 +1,10 @@
+import com.github.orekyuu.niconico.nama.NiconamaLib;
+
+
+public class NewMain {
+
+	public static void main(String[] args) {
+		NiconamaLib lib=new NiconamaLib();
+		lib.startGuestThread();
+	}
+}

@@ -1,0 +1,21 @@
+import java.io.IOException;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
+
+import com.github.orekyuu.niconico.nama.NiconamaLib;
+
+
+public class Main {
+
+	private String addr;
+	private String port;
+	private String thread;
+
+	public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException {
+		NiconamaLib lib=new NiconamaLib();
+		lib.startGuestThread();
+	}
+
+}

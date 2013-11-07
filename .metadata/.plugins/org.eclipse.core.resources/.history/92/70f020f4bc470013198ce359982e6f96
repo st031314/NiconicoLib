@@ -1,0 +1,14 @@
+package com.github.orekyuu.niconico.nama;
+
+class StreamInfoBuilder {
+
+	static StreamInfo create(String str){
+		StreamInfo info=new StreamInfo();
+		String[] data=str.split(",");
+		String xml=getXML();
+	}
+
+	private static String getXML(){
+
+	}
+}

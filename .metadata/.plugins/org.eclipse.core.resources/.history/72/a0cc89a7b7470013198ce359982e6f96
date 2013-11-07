@@ -1,0 +1,23 @@
+package com.github.orekyuu.niconico.nama;
+
+import java.util.List;
+
+class NiconamaThread extends Thread{
+
+	private String address;
+	private String port;
+	private String threadID;
+	private List<NiconamaListener> list;
+
+	NiconamaThread(String address,String port,String threadID,List<NiconamaListener> list){
+		this.address=address;
+		this.port=port;
+		this.threadID=threadID;
+		this.list=list;
+	}
+
+	@Override
+	public void run(){
+
+	}
+}

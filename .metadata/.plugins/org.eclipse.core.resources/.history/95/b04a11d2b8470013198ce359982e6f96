@@ -1,0 +1,77 @@
+package com.github.orekyuu.niconico.nama;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.Socket;
+import java.util.List;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
+
+import com.github.orekyuu.niconico.XMLHelper;
+
+class NiconamaThread extends Thread{
+
+	private String address;
+	private String port;
+	private String threadID;
+	private List<NiconamaListener> list;
+
+	private InputStream input;
+
+	NiconamaThread(String address,String port,String threadID,List<NiconamaListener> list){
+		this.address=address;
+		this.port=port;
+		this.threadID=threadID;
+		this.list=list;
+	}
+
+	@Override
+	public void run(){
+
+		try{
+			Socket socket=new Socket(address,Integer.parseInt(port));
+			DataOutputStream os=new DataOutputStream(socket.getOutputStream());
+			os.writeBytes("<thread thread=\"" + threadID + "\" version=\"20061206\" res_from=\"-1\"/>\0");
+			os.flush();
+
+			input=socket.getInputStream();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		DataInputStream is=new DataInputStream(socket.getInputStream());
+		while(true){
+			try {
+				List<String> list = receiveMessage(is);
+				for(String s:list)
+					System.out.println(s);
+			} catch (ParserConfigurationException e) {
+				e.printStackTrace();
+			} catch (SAXException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private List<String> receiveMessage(DataInputStream in) throws ParserConfigurationException, SAXException{
+		int len;
+		byte[] buffer = new byte[1024];
+
+		try {
+			while (true) {
+				len=in.read(buffer);
+				if(len<1)break;
+				String receve=new String(buffer);
+				receve=receve.replace('\0', '\n');
+				List<String> data=XMLHelper.getXMLValue("<root>"+receve+"</root>", "chat");
+				return data;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+}

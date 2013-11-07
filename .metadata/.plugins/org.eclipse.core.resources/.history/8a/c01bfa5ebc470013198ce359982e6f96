@@ -1,0 +1,6 @@
+package com.github.orekyuu.niconico.nama;
+
+public interface NiconamaListener {
+
+	void onReceive();
+}

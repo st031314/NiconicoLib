@@ -1,0 +1,27 @@
+import java.io.IOException;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
+
+import com.github.orekyuu.niconico.nama.NiconamaLib;
+import com.github.orekyuu.niconico.nama.NiconamaListener;
+import com.github.orekyuu.niconico.nama.StreamInfo;
+
+
+public class Main implements NiconamaListener{
+
+
+	public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException {
+		NiconamaLib lib=new NiconamaLib();
+		lib.addNiconamaListener(new Main());
+		lib.startGuestThread();
+	}
+
+	@Override
+	public void onReceive(StreamInfo info) {
+		System.out.println(info.getTitle());
+	}
+
+
+}

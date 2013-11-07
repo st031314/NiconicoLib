@@ -1,0 +1,16 @@
+package com.github.orekyuu.niconico.nama;
+
+public class NiconamaLib {
+
+	private NiconamaThread guest;
+	private List<NiconamaListener> list;
+
+	public NiconamaLib(){
+
+	}
+	public void startGuestThread(){
+		Login login=new GuestLogin();
+		login.login();
+		guest=new NiconamaThread(login.getAddress(), login.getPort(), login.getPort(), list)
+	}
+}

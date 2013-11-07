@@ -1,0 +1,39 @@
+package com.github.orekyuu.niconico.nama;
+
+public class NiconamaInfo {
+
+	/**
+	 * 放送ID
+	 */
+	private int broadcastID;
+
+	/**
+	 * 放送タイトル
+	 */
+	private  String title;
+
+	/**
+	 * 説明文
+	 */
+	private String description;
+
+	/**
+	 * 放送のタイプ
+	 */
+	private String provider_type;
+
+	/**
+	 * チャンネル・コミュニティのID
+	 */
+	private String communityID;
+
+	/**
+	 * チャンネルコミュニティの名前
+	 */
+	private String communityName;
+
+	/**
+	 * コミュ、チャンネルのサムネイルURL
+	 */
+	private String thumbnailURL;
+}

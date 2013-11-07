@@ -1,0 +1,56 @@
+package com.github.orekyuu.niconico.nama;
+
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Scanner;
+
+import com.github.orekyuu.niconico.XMLHelper;
+
+class GuestLogin implements Login{
+
+	private String thread;
+	private String address;
+	private String port;
+
+	GuestLogin(){
+
+	}
+
+	@Override
+	public void login() {
+		URL url=new URL("http://live.nicovideo.jp/api/getalertinfo");
+		HttpURLConnection http=(HttpURLConnection) url.openConnection();
+		http.setConnectTimeout(3000);
+		http.setRequestMethod("POST");
+		http.setUseCaches(false);
+		http.connect();
+
+		Scanner scanner=new Scanner(http.getInputStream(),"utf-8");
+		String lines="";
+		while(scanner.hasNext()){
+			lines+=scanner.nextLine();
+		}
+		System.out.println(lines);
+		address=XMLHelper.getXMLValue(lines, "addr").get(0);
+		port=XMLHelper.getXMLValue(lines, "port").get(0);
+		thread=XMLHelper.getXMLValue(lines, "thread").get(0);
+
+		scanner.close();
+		http.disconnect();
+	}
+
+	@Override
+	public String getThreadID() {
+		return null;
+	}
+
+	@Override
+	public String getAddress() {
+		return null;
+	}
+
+	@Override
+	public String getPort() {
+		return null;
+	}
+}

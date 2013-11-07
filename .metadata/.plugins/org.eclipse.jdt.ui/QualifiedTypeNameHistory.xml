@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="java.net.HttpURLConnection"/>
+<fullyQualifiedTypeName name="java.util.regex.Pattern"/>
+<fullyQualifiedTypeName name="java.util.regex.Matcher"/>
+<fullyQualifiedTypeName name="java.io.DataInputStream"/>
+<fullyQualifiedTypeName name="java.io.OutputStream"/>
+<fullyQualifiedTypeName name="javax.xml.parsers.DocumentBuilderFactory"/>
+<fullyQualifiedTypeName name="javax.xml.parsers.DocumentBuilder"/>
+<fullyQualifiedTypeName name="org.w3c.dom.Document"/>
+<fullyQualifiedTypeName name="org.w3c.dom.Element"/>
+<fullyQualifiedTypeName name="org.w3c.dom.Node"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="java.net.Socket"/>
+<fullyQualifiedTypeName name="java.io.InputStream"/>
+<fullyQualifiedTypeName name="java.lang.Exception"/>
+<fullyQualifiedTypeName name="java.lang.Thread"/>
+<fullyQualifiedTypeName name="com.github.orekyuu.niconico.nama.NiconamaThread"/>
+<fullyQualifiedTypeName name="com.github.orekyuu.niconico.nama.GuestLogin"/>
+<fullyQualifiedTypeName name="com.github.orekyuu.niconico.nama.NiconamaLib"/>
+<fullyQualifiedTypeName name="com.github.orekyuu.niconico.nama.NiconamaInfo"/>
+<fullyQualifiedTypeName name="com.github.orekyuu.niconico.nama.StreamInfoBuilder"/>
+<fullyQualifiedTypeName name="com.github.orekyuu.niconico.nama.NiconamaListener"/>
+<fullyQualifiedTypeName name="com.github.orekyuu.niconico.nama.StreamInfo"/>
+<fullyQualifiedTypeName name="com.github.orekyuu.niconico.nama.Login"/>
+<fullyQualifiedTypeName name="java.io.DataOutputStream"/>
+<fullyQualifiedTypeName name="com.github.orekyuu.niconico.XMLHelper"/>
+</qualifiedTypeNameHistroy>
